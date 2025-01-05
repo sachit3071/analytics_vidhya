@@ -114,7 +114,7 @@ def main():
     
     if st.button("Fetch Courses"):
         st.info("Fetching courses please wait...")
-        courses_texts = read_json_data("/content/course_data.json")
+        courses_texts = read_json_data("course_data.json")
         documents = get_documents(courses_texts)
         embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
         db = Chroma.from_documents(documents, embeddings)
