@@ -95,6 +95,17 @@ def get_documents(courses_texts):
     documents = text_splitter.create_documents(texts = texts, metadatas = metadatas)
     return documents
 
+def read_json_data(file_path):
+  try:
+    with open(file_path, 'r') as file:
+      data = json.load(file)
+      return data
+  except FileNotFoundError:
+    print(f"Error: File not found at {file_path}")
+    return None
+  except json.JSONDecodeError:
+    print(f"Error: Invalid JSON format in {file_path}")
+    return None
 
 def main():
     st.title("Analytics Vidhya Course Scraper")
@@ -105,17 +116,18 @@ def main():
         url = get_domain_link() + "/collections/courses"
         courses_texts = get_course_details(url)
 
+        courses_texts = read_json_data("/content/course_data.json")
         documents = get_documents(courses_texts)
         embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
         db = Chroma.from_documents(documents, embeddings)
         docs = db.similarity_search(query)
         
         if docs:
-            st.success(f"Found {len(courses)} courses!")
+            st.success(f"Found {len(docs)} courses!")
             st.write("Course Links:")
-            for course in docs:
-                st.write(f"- {course.metadata["course_name"]}")
-                st.write(f"- {course.metadata["link"]}")
+            for i, course in enumerate(docs):
+                st.write(f"{i+1}. {course.metadata["course_name"]}")
+                st.write(f"   -{course.metadata["link"]}")
         else:
             st.warning("No courses found.")
 
