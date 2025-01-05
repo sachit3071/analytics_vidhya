@@ -108,13 +108,12 @@ def read_json_data(file_path):
 
 def main():
     st.title("Analytics Vidhya Course Scraper")
-    
-    query = st.text_input("Enter URL", value=get_domain_link())
+    url = get_domain_link() + "/collections/courses"
+    courses_texts = get_course_details(url)
+    query = st.text_input("What do you want to learn today", value="Large language models")
     
     if st.button("Fetch Courses"):
-        url = get_domain_link() + "/collections/courses"
-        courses_texts = get_course_details(url)
-
+        st.info("Fetching courses please wait...")
         courses_texts = read_json_data("/content/course_data.json")
         documents = get_documents(courses_texts)
         embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
@@ -123,7 +122,7 @@ def main():
         
         if docs:
             st.success(f"Found {len(docs)} courses!")
-            st.write("Course Links:")
+            st.write("Course Names and Links:")
             for i, course in enumerate(docs):
                 st.write(f"{i+1}. {course.metadata['course_name']}")
                 st.write(f"   -{course.metadata['link']}")
