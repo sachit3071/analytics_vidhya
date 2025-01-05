@@ -1,2 +1,7 @@
-# analytics_vidhya
-Application to search free courses on analytics vidhya 
+title: Analytics Vidhya
+emoji: 📚
+colorFrom: red
+colorTo: purple
+sdk: docker
+pinned: false
+disable_embedding: true
