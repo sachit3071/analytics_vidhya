@@ -3,8 +3,6 @@ from bs4 import BeautifulSoup
 from langchain_chroma import Chroma
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain_text_splitters import CharacterTextSplitter
-import os
-import sentence_transformers
 import json
 import streamlit as st
 
@@ -80,9 +78,10 @@ def get_course_details(url):
         json.dump(course_texts, f, indent=4)
     return course_texts
 
-def get_documents(course_texts):
+def get_documents(course_texts:list):
     texts = []
     metadatas = []
+    print("course_texts",course_texts)
     for course_text in course_texts:
         texts.append(course_text["text"])
         metadatas.append({
@@ -109,12 +108,12 @@ def read_json_data(file_path):
 def main():
     st.title("Analytics Vidhya Course Scraper")
     url = get_domain_link() + "/collections/courses"
-    courses_texts = get_course_details(url)
+    # courses_texts = get_course_details(url)
     query = st.text_input("What do you want to learn today", value="Large language models")
     
     if st.button("Fetch Courses"):
         st.info("Fetching courses please wait...")
-        courses_texts = read_json_data("course_data.json")
+        courses_texts = read_json_data("content.json")
         documents = get_documents(courses_texts)
         embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
         db = Chroma.from_documents(documents, embeddings)
