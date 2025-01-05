@@ -126,8 +126,8 @@ def main():
             st.success(f"Found {len(docs)} courses!")
             st.write("Course Links:")
             for i, course in enumerate(docs):
-                st.write(f"{i+1}. {course.metadata["course_name"]}")
-                st.write(f"   -{course.metadata["link"]}")
+                st.write(f"{i+1}. {course.metadata['course_name']}")
+                st.write(f"   -{course.metadata['link']}")
         else:
             st.warning("No courses found.")
 
