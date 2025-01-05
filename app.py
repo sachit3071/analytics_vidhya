@@ -76,12 +76,11 @@ def get_course_details(url):
                     "course_name" : course_name
                 }
                 course_texts.append(course_text)
-    json_data = json.dumps(course_texts, indent=4)
     with open('content.json', 'w') as f:
         json.dump(course_texts, f, indent=4)
     return course_texts
 
-def get_documents(courses_texts):
+def get_documents(course_texts):
     texts = []
     metadatas = []
     for course_text in course_texts:
